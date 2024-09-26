@@ -1,0 +1,92 @@
+_schema-version: "3.2"
+ID: WorkflowTest
+version: 0.0.1
+modules:
+- name: WorkflowTest-destination-content
+  type: com.sap.application.content
+  requires:
+  - name: WorkflowTest-destination-service
+    parameters:
+      content-target: true
+  - name: WorkflowTest_html_repo_host
+    parameters:
+      service-key:
+        name: WorkflowTest_html_repo_host-key
+  - name: uaa_WorkflowTest
+    parameters:
+      service-key:
+        name: uaa_WorkflowTest-key
+  parameters:
+    content:
+      subaccount:
+        destinations:
+        - Name: WorkflowTest_WorkflowTest_html_repo_host
+          ServiceInstanceName: WorkflowTest-html5-app-host-service
+          ServiceKeyName: WorkflowTest_html_repo_host-key
+          sap.cloud.service: WorkflowTest
+        - Authentication: OAuth2UserTokenExchange
+          Name: WorkflowTest_uaa_WorkflowTest
+          ServiceInstanceName: WorkflowTest-xsuaa-service
+          ServiceKeyName: uaa_WorkflowTest-key
+          sap.cloud.service: WorkflowTest
+        existing_destinations_policy: ignore
+  build-parameters:
+    no-source: true
+- name: WorkflowTest-app-content
+  type: com.sap.application.content
+  path: .
+  requires:
+  - name: WorkflowTest_html_repo_host
+    parameters:
+      content-target: true
+  build-parameters:
+    build-result: resources
+    requires:
+    - artifacts:
+      - workflowmanagementworkflowuimodule.zip
+      name: workflowmanagementworkflowuimodule
+      target-path: resources/
+- name: workflowmanagementworkflowuimodule
+  type: html5
+  path: workflow-ui-module
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+resources:
+- name: WorkflowTest-destination-service
+  type: org.cloudfoundry.managed-service
+  parameters:
+    config:
+      HTML5Runtime_enabled: true
+      init_data:
+        subaccount:
+          destinations:
+          - Authentication: NoAuthentication
+            Name: ui5
+            ProxyType: Internet
+            Type: HTTP
+            URL: https://ui5.sap.com
+          existing_destinations_policy: update
+      version: 1.0.0
+    service: destination
+    service-name: WorkflowTest-destination-service
+    service-plan: lite
+- name: WorkflowTest_html_repo_host
+  type: org.cloudfoundry.managed-service
+  parameters:
+    service: html5-apps-repo
+    service-name: WorkflowTest-html5-app-host-service
+    service-plan: app-host
+- name: uaa_WorkflowTest
+  type: org.cloudfoundry.managed-service
+  parameters:
+    path: ./xs-security.json
+    service: xsuaa
+    service-name: WorkflowTest-xsuaa-service
+    service-plan: application
+parameters:
+  deploy_mode: html5-repo

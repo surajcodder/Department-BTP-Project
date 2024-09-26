@@ -1,0 +1,211 @@
+{
+    "_version": "1.26.0",
+    "sap.app": {
+        "id": "workflowmanagement.workflowuimodule",
+        "type": "application",
+        "i18n": "i18n/i18n.properties",
+        "applicationVersion": {
+            "version": "0.0.1"
+        },
+        "title": "{{appTitle}}",
+        "description": "{{appDescription}}",
+        "resources": "resources.json",
+        "sourceTemplate": {
+            "id": "@sap/generator-fiori:basic",
+            "version": "1.8.4",
+            "toolsId": "fd7bd899-112e-4cb5-8de6-a45f0c8aa7aa"
+        },
+        "dataSources": {
+            "mainService": {
+                "uri": "/sap/opu/odata/",
+                "type": "OData",
+                "settings": {
+                    "annotations": [],
+                    "localUri": "localService/metadata.xml",
+                    "odataVersion": "2.0"
+                }
+            }
+        }
+    },
+    "sap.ui": {
+        "technology": "UI5",
+        "icons": {
+            "icon": "",
+            "favIcon": "",
+            "phone": "",
+            "phone@2": "",
+            "tablet": "",
+            "tablet@2": ""
+        },
+        "deviceTypes": {
+            "desktop": true,
+            "tablet": true,
+            "phone": true
+        }
+    },
+    "sap.ui5": {
+        "flexEnabled": true,
+        "dependencies": {
+            "minUI5Version": "1.82.2",
+            "libs": {
+                "sap.m": {},
+                "sap.ui.core": {},
+                "sap.f": {},
+                "sap.suite.ui.generic.template": {},
+                "sap.ui.comp": {},
+                "sap.ui.generic.app": {},
+                "sap.ui.table": {},
+                "sap.ushell": {},
+                "sap.ui.unified": {}
+            }
+        },
+        "contentDensities": {
+            "compact": true,
+            "cozy": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "workflowmanagement.workflowuimodule.i18n.i18n"
+                }
+            },
+            "": {
+                "dataSource": "mainService",
+                "preload": true,
+                "settings": {}
+            }
+        },
+        "resources": {
+            "css": [
+                {
+                    "uri": "css/style.css"
+                }
+            ]
+        },
+        "routing": {
+            "config": {
+                "routerClass": "sap.m.routing.Router",
+                "viewType": "XML",
+                "async": true,
+                "viewPath": "workflowmanagement.workflowuimodule.view",
+                "controlAggregation": "pages",
+                "controlId": "app",
+                "clearControlAggregation": false
+            },
+            "routes": [
+                {
+                    "name": "RouteMyTaskUI",
+                    "pattern": ":?query:",
+                    "target": [
+                        "TargetMyTaskUI"
+                    ]
+                }
+            ],
+            "targets": {
+                "TargetMyTaskUI": {
+                    "viewType": "XML",
+                    "transition": "slide",
+                    "clearControlAggregation": false,
+                    "viewId": "MyTaskUI",
+                    "viewName": "MyTaskUI"
+                }
+            }
+        },
+        "rootView": {
+            "viewName": "workflowmanagement.workflowuimodule.view.App",
+            "type": "XML",
+            "async": true,
+            "id": "App"
+        }
+    },
+    "sap.cloud": {
+        "public": true,
+        "service": "WorkflowTest"
+    },
+    "sap.bpa.task": {
+        "_version": "1.0.0",
+        "outcomes": [
+            {
+                "id": "approve",
+                "label": "Approve"
+            },
+            {
+                "id": "reject",
+                "label": "Reject"
+            }
+        ],
+        "inputs": {
+            "$schema": "http://json-schema.org/draft-07/schema",
+            "title": "input",
+            "type": "object",
+            "required": [
+                "Name",
+                "Gender",
+                "PhoneNumber",
+                "Email",
+                "Address",
+                "Dep",
+                "Age",
+                "DOB",
+                "AdditionalSkills"
+
+            ],
+            "properties": {
+                "Name": {
+                    "type": "string",
+                    "title": "Name",
+                    "description": "Name of the teacher"
+                },
+                "Gender": {
+                    "type": "string",
+                    "title": "Gender",
+                    "description": "Gender of the teacher"
+                },
+                "PhoneNumber": {
+                    "type": "string",
+                    "title": "Phone Number",
+                    "description": "Phone number of the teacher"
+                },
+                "Email": {
+                    "type": "string",
+                    "title": "Email",
+                    "description": "Email address of the teacher"
+                },
+                "Address": {
+                    "type": "string",
+                    "title": "Address",
+                    "description": "Address of the teacher"
+                },
+                "Dep": {
+                    "type": "string",
+                    "title": "Department",
+                    "description": "Department of the teacher"
+                },
+                "Age": {
+                    "type": "number",
+                    "title": "Age",
+                    "description": "Age of the teacher"
+                },
+                "DOB": {
+                    "type": "string",
+                    "format": "date",
+                    "title": "Date of Birth",
+                    "description": "Date of birth of the teacher"
+                },
+                "AdditionalSkills": {
+                    "type": "string",
+                    "title": "Additional Skills",
+                    "description": "Additional skills of the teacher"
+                }, 
+                "PdfDocument":{
+                    "type": "string",
+                    "title": "PdfDocument",
+                    "description": "PdfDocument"
+                }
+            }
+        },
+        "outputs": {},
+        "category": "approval"
+    }
+}
